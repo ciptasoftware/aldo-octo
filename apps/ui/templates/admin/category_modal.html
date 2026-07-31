@@ -1,0 +1,33 @@
+{{ define "admin_category_modal" }}
+<div class="modal-overlay active" id="modalCatForm">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>{{ if .Category.ID }}Edit Kategori: {{ .Category.Name }}{{ else }}Buat Kategori Baru{{ end }}</h3>
+            <button type="button" class="btn-close" onclick="closeAdminModal('modalCatForm')">&times;</button>
+        </div>
+        <form onsubmit="submitAdminForm(event, '/admin/categories', 'containerCategories', 'modalCatForm')">
+            <input type="hidden" name="id" value="{{ .Category.ID }}">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nama Kategori <span style="color:red;">*</span></label>
+                    <input type="text" class="form-control" name="name" id="fCatName" value="{{ .Category.Name }}" placeholder="Masukkan nama kategori" required
+                           oninput="if(!document.getElementById('fCatSlug').dataset.userEdited){ document.getElementById('fCatSlug').value = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''); }">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Slug (Identitas URL) <span style="color:red;">*</span></label>
+                    <input type="text" class="form-control" name="slug" id="fCatSlug" value="{{ .Category.Slug }}" placeholder="contoh: pakaian-pria" required
+                           oninput="this.dataset.userEdited = true;">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Deskripsi <span style="color:red;">*</span></label>
+                    <textarea class="form-control" name="description" rows="3" placeholder="Deskripsi singkat kategori..." required>{{ .Category.Description }}</textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeAdminModal('modalCatForm')">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan Kategori</button>
+            </div>
+        </form>
+    </div>
+</div>
+{{ end }}

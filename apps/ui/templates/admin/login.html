@@ -1,0 +1,67 @@
+{{ define "admin_login" }}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Go-AI E-Commerce</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; padding: 1.5rem;">
+
+    <div class="login-wrapper" style="width: 100%; max-width: 420px;">
+        <div class="login-card" style="background: #ffffff; padding: 2.5rem; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2), 0 8px 10px -6px rgba(0,0,0,0.2);">
+            
+            <div class="login-header" style="text-align: center; margin-bottom: 2rem;">
+                <div style="width: 56px; height: 56px; background: #3b82f6; border-radius: 14px; margin: 0 auto 1.25rem; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 10px 15px -3px rgba(59,130,246,0.3);">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </div>
+                <h2 style="font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">Admin Login Portal</h2>
+                <p style="color: #64748b; font-size: 0.875rem;">Masuk ke dashboard manajemen toko Go-AI</p>
+            </div>
+
+            {{ if .Error }}
+                <div style="background: #fee2e2; border-left: 4px solid #ef4444; color: #991b1b; padding: 0.875rem 1rem; border-radius: 8px; font-size: 0.875rem; font-weight: 500; margin-bottom: 1.5rem;">
+                    {{ .Error }}
+                </div>
+            {{ end }}
+
+            <form action="/admin/login" method="POST">
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 0.5rem;">Username Admin</label>
+                    <input type="text" name="username" class="form-control" placeholder="Masukkan username..." value="{{ .Username }}" required autofocus
+                           style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.875rem; outline: none; transition: all 0.2s;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 0.5rem;">Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="••••••••" required
+                           style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.875rem; outline: none; transition: all 0.2s;">
+                </div>
+
+                <button type="submit" class="btn btn-primary" 
+                        style="width: 100%; padding: 0.875rem; background: #3b82f6; color: white; border: none; border-radius: 10px; font-weight: 600; font-size: 0.9375rem; cursor: pointer; transition: background 0.2s ease;">
+                    Login ke Dashboard &rarr;
+                </button>
+            </form>
+
+            <div style="margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid #e2e8f0; text-align: center;">
+                <div style="font-size: 0.8125rem; color: #64748b; background: #f8fafc; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <strong>Kredensial Default Admin:</strong><br>
+                    Username: <code style="color: #2563eb; font-weight: 600;">admin</code> | Password: <code style="color: #2563eb; font-weight: 600;">admin123</code>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
+{{ end }}

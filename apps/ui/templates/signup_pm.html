@@ -1,0 +1,77 @@
+{{ define "signup_pm" }}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran Akun Project Manager — AldoSolution</title>
+    <!-- CSS Admin/Store -->
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <!-- Google Font 'Inter' -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="login-body">
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div style="margin-bottom: 1.5rem; text-align: center;">
+                <a href="/" style="text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem;">
+                    <span style="font-size:1.6rem; font-weight:800; color:#0f172a;">Aldo<span style="color:#2563eb;">Solution</span></span>
+                </a>
+                <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-top: 0.75rem;">Daftar Project Manager Baru</h2>
+                <p style="font-size: 0.875rem; color: #64748b; margin-top: 0.25rem;">Isi formulir di bawah untuk mendaftar sebagai Project Manager</p>
+            </div>
+
+            {{ if .Error }}
+                <div class="alert alert-danger" style="margin-bottom: 1rem; padding: 0.75rem; background: #fef2f2; border: 1px solid #fecaca; color: #ef4444; border-radius: 8px; font-size: 0.875rem;">
+                    ⚠️ {{ .Error }}
+                </div>
+            {{ end }}
+
+            {{ if .Success }}
+                <div class="alert alert-success" style="margin-bottom: 1rem; padding: 0.75rem; background: #ecfdf5; border: 1px solid #a7f3d0; color: #10b981; border-radius: 8px; font-size: 0.875rem;">
+                    ✅ {{ .Success }}
+                </div>
+            {{ end }}
+
+            <form action="/signup-pm" method="POST" class="login-form">
+                <div class="form-group">
+                    <label for="name" class="form-label" style="display:block; margin-bottom:0.5rem; font-weight:600; font-size:0.875rem;">Nama Lengkap <span style="color:red;">*</span></label>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Rina Wijaya" value="{{ .Name }}" required autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label" style="display:block; margin-bottom:0.5rem; font-weight:600; font-size:0.875rem;">Alamat Email <span style="color:red;">*</span></label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="pm@perusahaan.com" value="{{ .Email }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label" style="display:block; margin-bottom:0.5rem; font-weight:600; font-size:0.875rem;">Kata Sandi (Minimal 6 karakter) <span style="color:red;">*</span></label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required minlength="6">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password" class="form-label" style="display:block; margin-bottom:0.5rem; font-weight:600; font-size:0.875rem;">Konfirmasi Kata Sandi <span style="color:red;">*</span></label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="••••••••" required minlength="6">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%; margin-top: 1rem; padding: 0.75rem; font-weight:600; font-size:0.9375rem;">
+                    Daftar Akun Project Manager &rarr;
+                </button>
+            </form>
+
+            <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid #e2e8f0; text-align: center; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.8125rem; color: #64748b;">
+                <div>
+                    Sudah memiliki akun Project Manager? <br>
+                    <a href="/login-project-manager" style="color: #2563eb; font-weight: 600; text-decoration: none;">Masuk ke Portal Project Manager &rarr;</a>
+                </div>
+                <a href="/" style="color: #64748b; text-decoration: none;">&larr; Kembali ke Beranda Store</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+{{ end }}

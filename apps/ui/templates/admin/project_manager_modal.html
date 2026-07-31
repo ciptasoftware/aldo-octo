@@ -1,0 +1,50 @@
+{{ define "admin_project_manager_modal" }}
+<div class="modal-overlay active" id="modalPMForm">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>{{ if .ProjectManager }}Edit Data Project Manager{{ else }}Tambah Project Manager Baru{{ end }}</h3>
+            <button class="btn-close" onclick="closeAdminModal('modalPMForm')">&times;</button>
+        </div>
+        <form onsubmit="submitAdminForm(event, '/admin/project-managers', 'containerProjectManagers', 'modalPMForm')">
+            <div class="modal-body">
+                <input type="hidden" name="id" value="{{ if .ProjectManager }}{{ .ProjectManager.ID }}{{ else }}0{{ end }}">
+                
+                <div class="form-group">
+                    <label class="form-label">Nama Lengkap <span style="color:red;">*</span></label>
+                    <input type="text" name="name" class="form-control" placeholder="Contoh: Rina Wijaya" value="{{ if .ProjectManager }}{{ .ProjectManager.Name }}{{ end }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Alamat Email <span style="color:red;">*</span></label>
+                    <input type="email" name="email" class="form-control" placeholder="pm@perusahaan.com" value="{{ if .ProjectManager }}{{ .ProjectManager.Email }}{{ end }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">No. Telepon / WhatsApp</label>
+                    <input type="text" name="phone" class="form-control" placeholder="081298765432" value="{{ if .ProjectManager }}{{ .ProjectManager.Phone }}{{ end }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nama Perusahaan / Institusi</label>
+                    <input type="text" name="company_name" class="form-control" placeholder="PT Inovasi Teknologi" value="{{ if .ProjectManager }}{{ .ProjectManager.CompanyName }}{{ end }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Deskripsi / Catatan Project Manager</label>
+                    <textarea name="description" class="form-control" rows="3" placeholder="Keterangan singkat manajer proyek...">{{ if .ProjectManager }}{{ .ProjectManager.Description }}{{ end }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Kata Sandi / Password {{ if .ProjectManager }}<small style="color:var(--text-muted); font-weight:normal;">(Kosongkan jika tidak diubah)</small>{{ else }}<span style="color:red;">*</span>{{ end }}</label>
+                    <input type="password" name="password" class="form-control" placeholder="••••••••" {{ if not .ProjectManager }}required{{ end }}>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeAdminModal('modalPMForm')">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan Project Manager</button>
+            </div>
+        </form>
+    </div>
+</div>
+{{ end }}

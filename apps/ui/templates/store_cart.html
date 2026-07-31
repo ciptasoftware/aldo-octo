@@ -1,0 +1,523 @@
+{{ define "store_cart" }}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keranjang Belanja — Aldo Solution Store</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Pure CSS Storefront -->
+    <link rel="stylesheet" href="/static/css/store.css?v=1.4">
+    <style>
+        .cart-page-section {
+            padding: 2.5rem 0 4rem;
+            background: #f8fafc;
+            min-height: 60vh;
+        }
+        .cart-grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 2rem;
+            align-items: start;
+        }
+        @media (max-width: 880px) {
+            .cart-grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        .cart-table-card {
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .cart-item-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 130px 120px 40px;
+            gap: 1.25rem;
+            align-items: center;
+            padding: 1.25rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .cart-item-row:last-child {
+            border-bottom: none;
+        }
+        @media (max-width: 640px) {
+            .cart-item-row {
+                grid-template-columns: 70px 1fr;
+                gap: 0.75rem;
+            }
+        }
+        .cart-item-thumb {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+        .cart-item-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #0f172a;
+            text-decoration: none;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+        .cart-item-name:hover {
+            color: #2563eb;
+        }
+        .cart-item-price {
+            font-size: 0.8125rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+        .cart-qty-ctrl {
+            display: flex;
+            align-items: center;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            overflow: hidden;
+            width: fit-content;
+        }
+        .cart-qty-btn {
+            width: 32px;
+            height: 32px;
+            background: #f1f5f9;
+            border: none;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cart-qty-btn:hover {
+            background: #e2e8f0;
+        }
+        .cart-qty-val {
+            width: 38px;
+            height: 32px;
+            text-align: center;
+            font-size: 0.875rem;
+            font-weight: 700;
+            border: none;
+            outline: none;
+            background: white;
+        }
+        .cart-item-subtotal {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0284c7;
+            text-align: right;
+        }
+        .cart-delete-btn {
+            background: #fef2f2;
+            color: #ef4444;
+            border: 1px solid #fecaca;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+        .cart-delete-btn:hover {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+        .summary-card {
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 2rem;
+        }
+        .summary-title {
+            font-size: 1.125rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: #475569;
+            margin-bottom: 0.85rem;
+        }
+        .summary-row.total {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #0f172a;
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+        .btn-checkout {
+            width: 100%;
+            padding: 0.85rem;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+            transition: all 0.2s ease;
+            margin-top: 1.25rem;
+        }
+        .btn-checkout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37,99,235,0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Topbar Strip -->
+    <div class="topbar">
+        <div class="container topbar-inner">
+            <div class="topbar-info">
+                <span>🚚 <strong>Gratis Ongkir</strong> Seluruh Indonesia</span>
+                <span class="topbar-divider">•</span>
+                <span>🛡️ <strong>100% Produk Original</strong> Bergaransi</span>
+            </div>
+            <div class="topbar-links">
+                {{ if .Customer }}
+                    <span style="color:#bfdbfe;">Halo, <strong>{{ .Customer.Name }}</strong> ({{ .Customer.UserType }})</span>
+                    <a href="/logout" style="color:#fca5a5;">Keluar</a>
+                {{ else }}
+                    <a href="/login">🔑 Login Mitra / PM</a>
+                {{ end }}
+                <a href="/admin/login" class="topbar-admin-link">🔐 Login Admin Panel</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="header-main">
+        <div class="container header-inner">
+            <a href="/" class="brand-logo">
+                <span class="brand-name">Aldo<span class="brand-accent">Solution</span></span>
+            </a>
+            <div class="search-wrapper">
+                <form action="/search" method="GET" class="search-box">
+                    <select class="search-select" name="cat">
+                        <option value="">Semua Kategori</option>
+                        {{ range .Categories }}
+                            <option value="{{ .Slug }}">{{ .Name }}</option>
+                        {{ end }}
+                    </select>
+                    <div class="search-input-wrap">
+                        <svg class="search-icon-inside" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" class="search-input" name="q" placeholder="Cari produk, merk, atau kategori...">
+                    </div>
+                    <button type="submit" class="search-btn"><span>Cari</span></button>
+                </form>
+            </div>
+            <div class="header-actions">
+                <a href="/cart" class="action-btn action-cart active">
+                    <div class="action-icon-circle cart-icon-box">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                        <span class="cart-badge-count" id="storeCartBadge">0</span>
+                    </div>
+                    <div class="action-text">
+                        <span class="action-sub">Keranjang</span>
+                        <span class="action-main" id="storeCartTotal">Rp 0</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumb-section" style="background:#ffffff; padding:0.85rem 0; border-bottom:1px solid #e2e8f0; font-size:0.875rem;">
+        <div class="container" style="display:flex; gap:0.5rem; color:#64748b;">
+            <a href="/" style="color:#2563eb; text-decoration:none; font-weight:500;">Beranda</a>
+            <span style="color:#cbd5e1;">&rsaquo;</span>
+            <strong style="color:#0f172a;">Keranjang Belanja</strong>
+        </div>
+    </nav>
+
+    <!-- Cart Page Section -->
+    <section class="cart-page-section">
+        <div class="container">
+            <h1 style="font-size:1.65rem; font-weight:800; color:#0f172a; margin-bottom:1.5rem;">Keranjang Belanja Anda</h1>
+
+            <div class="cart-grid-layout">
+                <!-- Cart Items Container -->
+                <div class="cart-table-card" id="cartItemsContainer">
+                    <!-- Populated dynamically by JavaScript -->
+                </div>
+
+                <!-- Summary Order Card -->
+                <div class="summary-card">
+                    <h2 class="summary-title">Ringkasan Pesanan</h2>
+                    
+                    <div class="summary-row">
+                        <span>Total Barang</span>
+                        <span id="summaryTotalItems">0 Unit</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Total Subtotal</span>
+                        <span id="summarySubtotal">Rp 0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Biaya Pengiriman</span>
+                        <span style="color:#16a34a; font-weight:700;">Gratis Ongkir</span>
+                    </div>
+                    
+                    <div class="summary-row total">
+                        <span>Total Pembayaran</span>
+                        <span id="summaryGrandTotal" style="color:#2563eb;">Rp 0</span>
+                    </div>
+
+                    <form id="checkoutForm" onsubmit="handleCheckout(event)">
+                        <button type="submit" class="btn-checkout" id="btnPesanSekarang">
+                            🛍️ Pesan Sekarang
+                        </button>
+                    </form>
+
+                    <p style="font-size:0.75rem; color:#64748b; margin-top:1rem; text-align:center; line-height:1.4;">
+                        *) Pesanan wajib dilakukan oleh akun **Mitra** atau **Project Manager** terdaftar.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-main">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="/" class="brand-logo" style="margin-bottom:1rem; display:inline-flex;">
+                        <span class="brand-name">Aldo<span class="brand-accent">Solution</span></span>
+                    </a>
+                    <p style="color:var(--text-muted); font-size:0.875rem; line-height:1.6; margin-bottom:1rem;">
+                        Platform belanja online terpercaya Aldo Solution dengan dominasi tampilan clean &amp; minimalis.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigasi Halaman</h4>
+                    <ul>
+                        <li><a href="/">Beranda Store</a></li>
+                        <li><a href="/#category-section">Kategori Produk</a></li>
+                        <li><a href="/#brand-section">Mitra Brand</a></li>
+                        <li><a href="/#product-section">Katalog Pilihan</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Pengelolaan Store</h4>
+                    <ul>
+                        <li><a href="/admin/login">Login Admin Panel</a></li>
+                        <li><a href="/admin/categories">Kelola Kategori</a></li>
+                        <li><a href="/admin/brands">Kelola Brand</a></li>
+                        <li><a href="/admin/products">Kelola Produk</a></li>
+                        <li><a href="/admin/orders">Kelola Pesanan</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Metode Pembayaran</h4>
+                    <p style="font-size:0.8125rem; color:var(--text-muted); margin-bottom:0.75rem;">Mendukung Transfer Bank &amp; E-Wallet:</p>
+                    <div style="display:flex; flex-wrap:wrap; gap:0.35rem;">
+                        <span class="badge badge-cat">BCA</span>
+                        <span class="badge badge-cat">Mandiri</span>
+                        <span class="badge badge-cat">GoPay</span>
+                        <span class="badge badge-cat">OVO</span>
+                        <span class="badge badge-cat">DANA</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 Aldo Solution. Hak Cipta Dilindungi.</div>
+                <div>Powered by <strong>Go Standard Library &amp; SQLite</strong></div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Store JS Scripts -->
+    <script src="/static/js/store.js?v=1.4"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        renderCartPage();
+    });
+
+    function formatIDR(amount) {
+        const intPart = Math.round(amount);
+        return 'Rp ' + intPart.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    function getStoredCart() {
+        try {
+            return JSON.parse(localStorage.getItem('aldo_store_cart')) || [];
+        } catch(e) {
+            return [];
+        }
+    }
+
+    function saveStoredCart(cart) {
+        localStorage.setItem('aldo_store_cart', JSON.stringify(cart));
+        updateCartHeaderBadges();
+    }
+
+    const SVG_CART_PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%23f1f5f9' rx='8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='28'%3E📦%3C/text%3E%3C/svg%3E";
+
+    function handleCartImgError(imgEl) {
+        imgEl.onerror = null;
+        imgEl.src = SVG_CART_PLACEHOLDER;
+    }
+
+    function renderCartPage() {
+        const cart = getStoredCart();
+        const container = document.getElementById('cartItemsContainer');
+        if (!container) return;
+
+        if (cart.length === 0) {
+            container.innerHTML = `
+                <div style="text-align:center; padding:3.5rem 1.5rem;">
+                    <div style="font-size:3.5rem; margin-bottom:1rem;">🛒</div>
+                    <h3 style="font-size:1.25rem; font-weight:800; color:#0f172a; margin-bottom:0.5rem;">Keranjang Belanja Masih Kosong</h3>
+                    <p style="color:#64748b; font-size:0.875rem; max-width:400px; margin:0 auto 1.5rem; line-height:1.6;">
+                        Anda belum menambahkan produk ke keranjang belanja. Yuk, jelajahi katalog produk berkualitas kami!
+                    </p>
+                    <a href="/" style="display:inline-block; padding:0.65rem 1.5rem; background:#2563eb; color:white; font-weight:700; border-radius:8px; text-decoration:none;">
+                        &larr; Mulai Belanja Sekarang
+                    </a>
+                </div>
+            `;
+            document.getElementById('summaryTotalItems').innerText = '0 Unit';
+            document.getElementById('summarySubtotal').innerText = 'Rp 0';
+            document.getElementById('summaryGrandTotal').innerText = 'Rp 0';
+            document.getElementById('btnPesanSekarang').disabled = true;
+            document.getElementById('btnPesanSekarang').style.opacity = '0.5';
+            return;
+        }
+
+        let html = '';
+        let grandTotal = 0;
+        let totalUnits = 0;
+
+        cart.forEach((item, index) => {
+            const subtotal = (item.price || 0) * (item.qty || 1);
+            grandTotal += subtotal;
+            totalUnits += (item.qty || 1);
+
+            let thumbSrc = item.thumbnail || '';
+            if (!thumbSrc || thumbSrc === '/static/img/no-image.png') {
+                thumbSrc = SVG_CART_PLACEHOLDER;
+            }
+
+            html += `
+                <div class="cart-item-row">
+                    <img src="${thumbSrc}" class="cart-item-thumb" alt="${item.name}" onerror="handleCartImgError(this)">
+                    <div>
+                        <a href="/product/${item.slug || '#'}" class="cart-item-name">${item.name}</a>
+                        <div class="cart-item-price">${formatIDR(item.price)}</div>
+                    </div>
+                    <div>
+                        <div class="cart-qty-ctrl">
+                            <button type="button" class="cart-qty-btn" onclick="updateCartItemQty(${index}, -1)">-</button>
+                            <input type="text" class="cart-qty-val" value="${item.qty}" readonly>
+                            <button type="button" class="cart-qty-btn" onclick="updateCartItemQty(${index}, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="cart-item-subtotal">${formatIDR(subtotal)}</div>
+                    <div>
+                        <button type="button" class="cart-delete-btn" onclick="removeCartItem(${index})" title="Hapus dari keranjang">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+        document.getElementById('summaryTotalItems').innerText = totalUnits + ' Unit';
+        document.getElementById('summarySubtotal').innerText = formatIDR(grandTotal);
+        document.getElementById('summaryGrandTotal').innerText = formatIDR(grandTotal);
+        document.getElementById('btnPesanSekarang').disabled = false;
+        document.getElementById('btnPesanSekarang').style.opacity = '1';
+    }
+
+    function updateCartItemQty(index, delta) {
+        let cart = getStoredCart();
+        if (!cart[index]) return;
+
+        cart[index].qty = (cart[index].qty || 1) + delta;
+        if (cart[index].qty <= 0) {
+            cart.splice(index, 1);
+        }
+        saveStoredCart(cart);
+        renderCartPage();
+    }
+
+    function removeCartItem(index) {
+        let cart = getStoredCart();
+        cart.splice(index, 1);
+        saveStoredCart(cart);
+        renderCartPage();
+    }
+
+    function handleCheckout(e) {
+        e.preventDefault();
+        const cart = getStoredCart();
+        if (cart.length === 0) {
+            alert('Keranjang belanja kosong!');
+            return;
+        }
+
+        const payload = {
+            items: cart.map(i => ({
+                product_id: i.id,
+                product_name: i.name,
+                price: i.price,
+                quantity: i.qty
+            }))
+        };
+
+        fetch('/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).then(r => {
+            if (r.status === 401) {
+                // Not logged in -> Redirect to customer login
+                alert('Anda harus login sebagai Mitra atau Project Manager untuk membuat pesanan!');
+                window.location.href = '/login?redirect=/cart';
+                return null;
+            }
+            return r.json();
+        }).then(res => {
+            if (!res) return;
+            if (res.success) {
+                alert('🎉 Pesanan berhasil dibuat! Nomor Pesanan: #' + res.order_id);
+                localStorage.removeItem('aldo_store_cart');
+                renderCartPage();
+                window.location.href = '/checkout/success?order_id=' + res.order_id;
+            } else {
+                alert('Gagal membuat pesanan: ' + (res.error || 'Terjadi kesalahan.'));
+            }
+        }).catch(err => {
+            alert('Terjadi kesalahan jaringan: ' + err);
+        });
+    }
+    </script>
+</body>
+</html>
+{{ end }}

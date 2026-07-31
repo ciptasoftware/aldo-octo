@@ -1,0 +1,12 @@
+{{ define "admin_orders" }}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Kelola Pesanan Masuk</h1>
+        <p style="color:var(--text-muted); margin-top:0.25rem;">Daftar pesanan dari akun Mitra & Project Manager terdaftar.</p>
+    </div>
+</div>
+
+<div class="table-container" id="containerOrders">
+    {{ template "admin_order_table" . }}
+</div>
+{{ end }}

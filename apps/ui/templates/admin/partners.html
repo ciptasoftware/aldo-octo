@@ -1,0 +1,19 @@
+{{ define "admin_partners" }}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Manajemen Partner / Mitra</h1>
+        <p style="color:var(--text-muted); margin-top:0.25rem;">Kelola data mitra bisnis dan vendor yang terdaftar.</p>
+    </div>
+    <button class="btn btn-primary" onclick="openAdminModal('/admin/partners/modal')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Tambah Partner
+    </button>
+</div>
+
+<div class="table-container" id="containerPartners">
+    {{ template "admin_partner_table" . }}
+</div>
+{{ end }}

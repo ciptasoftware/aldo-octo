@@ -1,0 +1,47 @@
+# Ignore hidden files and directories (starts with dot)
+.*
+!.gitignore
+
+# Environment variables
+.env
+*.env
+*.env.*
+
+# Executables & Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+bin/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+
+# OS specific files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Ehthumbs.db:encryptable
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Project specific caches and logs
+cache/
+*.log

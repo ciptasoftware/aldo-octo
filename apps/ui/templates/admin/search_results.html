@@ -1,0 +1,285 @@
+{{ define "admin_search_results" }}
+{{ if eq .Results.TotalCount 0 }}
+    <div style="text-align:center; padding:4rem 2rem; background:#ffffff; border-radius:12px; border:1px solid var(--border);">
+        <div style="font-size:3.5rem; margin-bottom:1rem;">🔍</div>
+        <h3 style="font-size:1.25rem; font-weight:800; color:var(--text-main); margin-bottom:0.5rem;">Tidak Ada Hasil Pencarian</h3>
+        <p style="color:var(--text-muted); font-size:0.875rem; max-width:480px; margin:0 auto 1.5rem; line-height:1.6;">
+            Tidak ditemukan data yang cocok dengan kata kunci <strong>"{{ .SearchQuery }}"</strong> pada kategori menu yang Anda pilih. Silakan coba dengan kata kunci lain.
+        </p>
+    </div>
+{{ else }}
+    <div style="display:flex; flex-direction:column; gap:2rem;">
+        
+        <!-- 1. Categories Results -->
+        {{ if .Results.Categories }}
+        <div style="background:#ffffff; border-radius:12px; border:1px solid var(--border); padding:1.25rem;">
+            <h3 style="font-size:1rem; font-weight:800; color:var(--text-main); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+                <span>📁 Kategori Produk</span>
+                <span class="badge badge-cat">{{ len .Results.Categories }} Ditemukan</span>
+            </h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Nama Kategori</th>
+                        <th>Slug</th>
+                        <th>Deskripsi</th>
+                        <th width="140" style="text-align:center;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ range .Results.Categories }}
+                    <tr>
+                        <td><strong>{{ .Name }}</strong></td>
+                        <td><code>{{ .Slug }}</code></td>
+                        <td>{{ if .Description }}{{ .Description }}{{ else }}—{{ end }}</td>
+                        <td style="text-align:center;">
+                            <div style="display:flex; gap:0.4rem; justify-content:center;">
+                                <button type="button" class="btn btn-outline" style="font-size:0.75rem; padding:0.3rem 0.6rem;" onclick="openAdminModal('/admin/categories/modal?id={{ .ID }}')">✏️ Edit</button>
+                                <button type="button" class="btn btn-outline" style="font-size:0.75rem; padding:0.3rem 0.6rem; color:#ef4444; border-color:#fca5a5;" onclick="deleteAdminItem('/admin/categories/delete?id={{ .ID }}', 'containerCategories', 'Hapus kategori {{ .Name }}?')">🗑️ Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+        {{ end }}
+
+        <!-- 2. Brands Results -->
+        {{ if .Results.Brands }}
+        <div style="background:#ffffff; border-radius:12px; border:1px solid var(--border); padding:1.25rem;">
+            <h3 style="font-size:1rem; font-weight:800; color:var(--text-main); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+                <span>🏷️ Brand / Merk</span>
+                <span class="badge badge-brand">{{ len .Results.Brands }} Ditemukan</span>
+            </h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Logo &amp; Brand</th>
+                        <th>Slug</th>
+                        <th>Deskripsi</th>
+                        <th width="140" style="text-align:center;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ range .Results.Brands }}
+                    <tr>
+                        <td style="display:flex; align-items:center; gap:0.75rem;">
+                            {{ if .LogoURL }}
+                            <img src="{{ .LogoURL }}" style="width:36px; height:36px; object-fit:contain; border-radius:6px; border:1px solid #e2e8f0;" alt="{{ .Name }}" onerror="this.onerror=null; this.style.display='none';">
+                            {{ end }}
+                            <strong>{{ .Name }}</strong>
+                        </td>
+                        <td><code>{{ .Slug }}</code></td>
+                        <td>{{ if .Description }}{{ .Description }}{{ else }}—{{ end }}</td>
+                        <td style="text-align:center;">
+                            <div style="display:flex; gap:0.4rem; justify-content:center;">
+                                <button type="button" class="btn btn-outline" style="font-size:0.75rem; padding:0.3rem 0.6rem;" onclick="openAdminModal('/admin/brands/modal?id={{ .ID }}')">✏️ Edit</button>
+                                <button type="button" class="btn btn-outline" style="font-size:0.75rem; padding:0.3rem 0.6rem; color:#ef4444; border-color:#fca5a5;" onclick="deleteAdminItem('/admin/brands/delete?id={{ .ID }}', 'containerBrands', 'Hapus brand {{ .Name }}?')">🗑️ Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+        {{ end }}
+
+        <!-- 3. Products Results -->
+        {{ if .Results.Products }}
+        <div style="background:#ffffff; border-radius:12px; border:1px solid var(--border); padding:1.25rem;">
+            <h3 style="font-size:1rem; font-weight:800; color:var(--text-main); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+                <span>📦 Master Produk</span>
+                <span class="badge badge-cat" style="background:#f0fdf4; color:#166534; border-color:#bbf7d0;">{{ len .Results.Products }} Ditemukan</span>
+            </h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Produk</th>
+                        <th>Kategori &amp; Brand</th>
+                        <th>Harga</th>
+                        <th>Stok</th>
+                        <th width="140" style="text-align:center;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ range .Results.Products }}
+                    <tr>
+                        <td>
+                            <div style="display:flex; align-items:center; gap:0.75rem;">
+                                <img src="{{ if .Thumbnail }}{{ .Thumbnail }}{{ else }}data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23f1f5f9'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='16'%3E📦%3C/text%3E%3C/svg%3E{{ end }}" style="width:40px; height:40px; object-fit:cover; border-radius:6px; border:1px solid #e2e8f0;" alt="{{ .Name }}" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\' viewBox=\'0 0 40 40\'%3E%3Crect width=\'40\' height=\'40\' fill=\'%23f1f5f9\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'16\'%3E📦%3C/text%3E%3C/svg%3E';">
+                                <div>
+                                    <strong>{{ .Name }}</strong><br>
+                                    <small style="color:var(--text-muted);">/product/{{ .Slug }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge badge-brand">{{ .BrandName }}</span>
+                            <span class="badge badge-cat">{{ .CategoryName }}</span>
+                        </td>
+                        <td><strong style="color:var(--price);">{{ .FormattedPrice }}</strong></td>
+                        <td><strong>{{ .Stock }}</strong> unit</td>
+                        <td style="text-align:center;">
+                            <div style="display:flex; gap:0.4rem; justify-content:center;">
+                                <button type="button" class="btn btn-outline" style="font-size:0.75rem; padding:0.3rem 0.6rem;" onclick="openAdminModal('/admin/products/modal?id={{ .ID }}')">✏️ Edit</button>
+                                <button type="button" class="btn btn-outline" style="font-size:0.75rem; padding:0.3rem 0.6rem; color:#ef4444; border-color:#fca5a5;" onclick="deleteAdminItem('/admin/products/delete?id={{ .ID }}', 'containerProducts', 'Hapus produk {{ .Name }}?')">🗑️ Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+        {{ end }}
+
+        <!-- 4. Partners Results -->
+        {{ if .Results.Partners }}
+        <div style="background:#ffffff; border-radius:12px; border:1px solid var(--border); padding:1.25rem;">
+            <h3 style="font-size:1rem; font-weight:800; color:var(--text-main); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+                <span>🤝 Partner / Mitra</span>
+                <span class="badge badge-cat">{{ len .Results.Partners }} Ditemukan</span>
+            </h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Nama &amp; Email</th>
+                        <th>Telepon</th>
+                        <th>Perusahaan</th>
+                        <th width="140" style="text-align:center;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ range .Results.Partners }}
+                    <tr>
+                        <td><strong>{{ .Name }}</strong><br><small style="color:var(--text-muted);">{{ .Email }}</small></td>
+                        <td>{{ if .Phone }}{{ .Phone }}{{ else }}—{{ end }}</td>
+                        <td>{{ if .CompanyName }}{{ .CompanyName }}{{ else }}—{{ end }}</td>
+                        <td style="text-align:center;">
+                            <div style="display:flex; gap:0.4rem; justify-content:center;">
+                                <button type="button" class="btn btn-outline" style="font-size:0.75rem; padding:0.3rem 0.6rem;" onclick="openAdminModal('/admin/partners/modal?id={{ .ID }}')">✏️ Edit</button>
+                                <button type="button" class="btn btn-outline" style="font-size:0.75rem; padding:0.3rem 0.6rem; color:#ef4444; border-color:#fca5a5;" onclick="deleteAdminItem('/admin/partners/delete?id={{ .ID }}', 'containerPartners', 'Hapus partner {{ .Name }}?')">🗑️ Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+        {{ end }}
+
+        <!-- 5. Project Managers Results -->
+        {{ if .Results.ProjectManagers }}
+        <div style="background:#ffffff; border-radius:12px; border:1px solid var(--border); padding:1.25rem;">
+            <h3 style="font-size:1rem; font-weight:800; color:var(--text-main); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+                <span>📋 Project Manager</span>
+                <span class="badge badge-cat">{{ len .Results.ProjectManagers }} Ditemukan</span>
+            </h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Nama &amp; Email</th>
+                        <th>Telepon</th>
+                        <th>Perusahaan</th>
+                        <th width="140" style="text-align:center;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ range .Results.ProjectManagers }}
+                    <tr>
+                        <td><strong>{{ .Name }}</strong><br><small style="color:var(--text-muted);">{{ .Email }}</small></td>
+                        <td>{{ if .Phone }}{{ .Phone }}{{ else }}—{{ end }}</td>
+                        <td>{{ if .CompanyName }}{{ .CompanyName }}{{ else }}—{{ end }}</td>
+                        <td style="text-align:center;">
+                            <div style="display:flex; gap:0.4rem; justify-content:center;">
+                                <button type="button" class="btn btn-outline" style="font-size:0.75rem; padding:0.3rem 0.6rem;" onclick="openAdminModal('/admin/project-managers/modal?id={{ .ID }}')">✏️ Edit</button>
+                                <button type="button" class="btn btn-outline" style="font-size:0.75rem; padding:0.3rem 0.6rem; color:#ef4444; border-color:#fca5a5;" onclick="deleteAdminItem('/admin/project-managers/delete?id={{ .ID }}', 'containerPMs', 'Hapus project manager {{ .Name }}?')">🗑️ Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+        {{ end }}
+
+        <!-- 6. Banners Results -->
+        {{ if .Results.Banners }}
+        <div style="background:#ffffff; border-radius:12px; border:1px solid var(--border); padding:1.25rem;">
+            <h3 style="font-size:1rem; font-weight:800; color:var(--text-main); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+                <span>🎁 Banner Promosi</span>
+                <span class="badge badge-cat">{{ len .Results.Banners }} Ditemukan</span>
+            </h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Icon &amp; Judul</th>
+                        <th>Badge Text</th>
+                        <th>Status</th>
+                        <th width="140" style="text-align:center;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ range .Results.Banners }}
+                    <tr>
+                        <td><span style="font-size:1.2rem; margin-right:0.4rem;">{{ .Icon }}</span> <strong>{{ .Title }}</strong></td>
+                        <td><span class="badge badge-brand">{{ .BadgeText }}</span></td>
+                        <td>
+                            {{ if .IsActive }}<span class="badge badge-success">✓ AKTIF</span>{{ else }}<span class="badge badge-warning">NON-AKTIF</span>{{ end }}
+                        </td>
+                        <td style="text-align:center;">
+                            <div style="display:flex; gap:0.4rem; justify-content:center;">
+                                <button type="button" class="btn btn-outline" style="font-size:0.75rem; padding:0.3rem 0.6rem;" onclick="openAdminModal('/admin/banners/modal?id={{ .ID }}')">✏️ Edit</button>
+                                <button type="button" class="btn btn-outline" style="font-size:0.75rem; padding:0.3rem 0.6rem; color:#ef4444; border-color:#fca5a5;" onclick="deleteAdminItem('/admin/banners/delete?id={{ .ID }}', 'containerBanners', 'Hapus banner {{ .Title }}?')">🗑️ Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+        {{ end }}
+
+        <!-- 7. Orders Results -->
+        {{ if .Results.Orders }}
+        <div style="background:#ffffff; border-radius:12px; border:1px solid var(--border); padding:1.25rem;">
+            <h3 style="font-size:1rem; font-weight:800; color:var(--text-main); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+                <span>🛍️ Pesanan Masuk</span>
+                <span class="badge badge-cat">{{ len .Results.Orders }} Ditemukan</span>
+            </h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>No. Order</th>
+                        <th>Email User &amp; Tipe</th>
+                        <th>Total Harga</th>
+                        <th>Status</th>
+                        <th width="140" style="text-align:center;">Aksi Admin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ range .Results.Orders }}
+                    <tr>
+                        <td><strong>#{{ .ID }}</strong></td>
+                        <td><strong>{{ .Email }}</strong> ({{ .UserType }})</td>
+                        <td><strong style="color:#0284c7;">{{ .FormattedTotalPrice }}</strong></td>
+                        <td>
+                            {{ if eq .Status "SELESAI" }}<span class="badge badge-success">✓ SELESAI</span>{{ else }}<span class="badge badge-warning">⏳ PENDING</span>{{ end }}
+                        </td>
+                        <td style="text-align:center;">
+                            {{ if eq .Status "SELESAI" }}
+                                <span style="font-size:0.75rem; color:#64748b; font-weight:600;">Sudah Selesai</span>
+                            {{ else }}
+                                <button type="button" class="btn btn-primary" style="font-size:0.75rem; padding:0.35rem 0.75rem; background:#16a34a; border-color:#16a34a;" onclick="completeAdminOrder({{ .ID }})">✓ Selesai</button>
+                            {{ end }}
+                        </td>
+                    </tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+        {{ end }}
+
+    </div>
+{{ end }}
+{{ end }}

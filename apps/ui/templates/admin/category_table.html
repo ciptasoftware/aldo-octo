@@ -1,0 +1,55 @@
+{{ define "admin_category_table" }}
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>Nama Kategori</th>
+            <th>Slug (Identitas URL)</th>
+            <th>Deskripsi</th>
+            <th width="100">Aksi</th>
+        </tr>
+    </thead>
+    <tbody id="tblBodyCategories">
+        {{ if .Categories }}
+            {{ range .Categories }}
+            <tr>
+                <td><strong>{{ .Name }}</strong></td>
+                <td><code>{{ .Slug }}</code></td>
+                <td>{{ if .Description }}{{ .Description }}{{ else }}<span style="color:var(--text-muted);">-</span>{{ end }}</td>
+                <td>
+                    <div style="display:flex; gap:0.5rem">
+                        <button class="btn btn-icon btn-outline" 
+                                onclick="openAdminModal('/admin/categories/modal?id={{ .ID }}')" 
+                                title="Edit">✏️</button>
+                        <button class="btn btn-icon btn-danger-outline" 
+                                onclick="deleteAdminItem('/admin/categories?id={{ .ID }}', 'containerCategories', 'Hapus kategori {{ .Name }}?')" 
+                                title="Hapus">🗑️</button>
+                    </div>
+                </td>
+            </tr>
+            {{ end }}
+        {{ else }}
+            <tr>
+                <td colspan="4" style="text-align:center; padding:2rem; color:var(--text-muted)">Belum ada data kategori. Klik "Tambah Kategori" untuk membuat baru.</td>
+            </tr>
+        {{ end }}
+    </tbody>
+</table>
+
+{{ if .PageInfo }}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem; padding-top:1rem; border-top:1px solid #e2e8f0; font-size:0.875rem; color:#64748b;">
+    <div>
+        Halaman <strong>{{ .PageInfo.CurrentPage }}</strong> dari <strong>{{ .PageInfo.TotalPages }}</strong> (Total {{ .PageInfo.TotalCount }} Data)
+    </div>
+    <div style="display:flex; gap:0.5rem;">
+        <button class="btn btn-outline" style="padding:0.35rem 0.75rem; font-size:0.8125rem;"
+                {{ if not .PageInfo.HasPrev }}disabled style="opacity:0.5; cursor:not-allowed;"{{ else }}onclick="changeAdminPage('/admin/categories', {{ .PageInfo.PrevPage }}, 'containerCategories')"{{ end }}>
+            &laquo; Prev
+        </button>
+        <button class="btn btn-outline" style="padding:0.35rem 0.75rem; font-size:0.8125rem;"
+                {{ if not .PageInfo.HasNext }}disabled style="opacity:0.5; cursor:not-allowed;"{{ else }}onclick="changeAdminPage('/admin/categories', {{ .PageInfo.NextPage }}, 'containerCategories')"{{ end }}>
+            Next &raquo;
+        </button>
+    </div>
+</div>
+{{ end }}
+{{ end }}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go-AI Contact Manager</title>
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-logo">
+                <div class="logo-circle">Go</div>
+                <h1>Go-AI Contact Manager</h1>
+            </div>
+            <p class="subtitle">Enterprise Grade • HTMX • SQLite</p>
+        </header>
+        
+        <main class="app-content">
+            <!-- Sidebar for Form -->
+            <aside class="sidebar">
+                <div class="card form-card">
+                    <h2>Tambah Kontak Baru</h2>
+                    <!-- Placeholder for the form (loaded via HTMX) -->
+                    <div hx-get="/contacts/new" hx-trigger="load" hx-target="this">
+                        Loading form...
+                    </div>
+                </div>
+            </aside>
+            
+            <!-- Main Content for Table -->
+            <section class="main-panel">
+                <div class="card table-card">
+                    <div class="card-header">
+                        <h2>Daftar Kontak</h2>
+                    </div>
+                    
+                    <!-- Include the list snippet initially -->
+                    {{ template "list.html" . }}
+                    
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

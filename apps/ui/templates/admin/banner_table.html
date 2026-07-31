@@ -1,0 +1,83 @@
+{{ define "admin_banner_table" }}
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th width="60">Icon</th>
+            <th>Badge & Judul Banner</th>
+            <th>Deskripsi</th>
+            <th>Tombol CTA & Target URL</th>
+            <th width="110">Status Halaman</th>
+            <th width="100">Aksi</th>
+        </tr>
+    </thead>
+    <tbody id="tblBodyBanners">
+        {{ if .Banners }}
+            {{ range .Banners }}
+            <tr>
+                <td style="text-align:center; font-size:1.75rem;">
+                    <div style="width:44px; height:44px; background:#f1f5f9; border-radius:10px; display:inline-flex; align-items:center; justify-content:center;">
+                        {{ if .Icon }}{{ .Icon }}{{ else }}🎁{{ end }}
+                    </div>
+                </td>
+                <td>
+                    <span class="badge badge-warning" style="font-size:0.7rem; margin-bottom:0.25rem; display:inline-block;">{{ .BadgeText }}</span><br>
+                    <strong style="color:#0f172a; font-size:0.9375rem;">{{ .Title }}</strong>
+                </td>
+                <td>
+                    <p style="font-size:0.8125rem; color:#64748b; margin:0; line-height:1.4; max-width:320px;">{{ .Description }}</p>
+                </td>
+                <td>
+                    <strong style="font-size:0.8125rem; color:#2563eb;">{{ .CtaText }}</strong><br>
+                    <code style="font-size:0.75rem; color:#64748b;">{{ .CtaURL }}</code>
+                </td>
+                <td>
+                    {{ if .IsActive }}
+                        <button class="btn btn-success" style="padding:0.25rem 0.6rem; font-size:0.75rem; border-radius:20px;"
+                                onclick="toggleAdminItem('/admin/banners/toggle?id={{ .ID }}', 'containerBanners')" title="Klik untuk nonaktifkan">
+                            ✅ Aktif
+                        </button>
+                    {{ else }}
+                        <button class="btn btn-outline" style="padding:0.25rem 0.6rem; font-size:0.75rem; border-radius:20px; color:#94a3b8; border-color:#cbd5e1;"
+                                onclick="toggleAdminItem('/admin/banners/toggle?id={{ .ID }}', 'containerBanners')" title="Klik untuk aktifkan">
+                            ⚪ Nonaktif
+                        </button>
+                    {{ end }}
+                </td>
+                <td>
+                    <div style="display:flex; gap:0.5rem">
+                        <button class="btn btn-icon btn-outline" 
+                                onclick="openAdminModal('/admin/banners/modal?id={{ .ID }}')" 
+                                title="Edit">✏️</button>
+                        <button class="btn btn-icon btn-danger-outline" 
+                                onclick="deleteAdminItem('/admin/banners?id={{ .ID }}', 'containerBanners', 'Hapus banner {{ .Title }}?')" 
+                                title="Hapus">🗑️</button>
+                    </div>
+                </td>
+            </tr>
+            {{ end }}
+        {{ else }}
+            <tr>
+                <td colspan="6" style="text-align:center; padding:2rem; color:var(--text-muted)">Belum ada data banner. Klik "Tambah Banner Baru" untuk membuat baru.</td>
+            </tr>
+        {{ end }}
+    </tbody>
+</table>
+
+{{ if .PageInfo }}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem; padding-top:1rem; border-top:1px solid #e2e8f0; font-size:0.875rem; color:#64748b;">
+    <div>
+        Halaman <strong>{{ .PageInfo.CurrentPage }}</strong> dari <strong>{{ .PageInfo.TotalPages }}</strong> (Total {{ .PageInfo.TotalCount }} Data)
+    </div>
+    <div style="display:flex; gap:0.5rem;">
+        <button class="btn btn-outline" style="padding:0.35rem 0.75rem; font-size:0.8125rem;"
+                {{ if not .PageInfo.HasPrev }}disabled style="opacity:0.5; cursor:not-allowed;"{{ else }}onclick="changeAdminPage('/admin/banners', {{ .PageInfo.PrevPage }}, 'containerBanners')"{{ end }}>
+            &laquo; Prev
+        </button>
+        <button class="btn btn-outline" style="padding:0.35rem 0.75rem; font-size:0.8125rem;"
+                {{ if not .PageInfo.HasNext }}disabled style="opacity:0.5; cursor:not-allowed;"{{ else }}onclick="changeAdminPage('/admin/banners', {{ .PageInfo.NextPage }}, 'containerBanners')"{{ end }}>
+            Next &raquo;
+        </button>
+    </div>
+</div>
+{{ end }}
+{{ end }}

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="OBSShop - Belanja online terpercaya. Temukan jutaan produk pilihan dengan harga terbaik dan pengiriman cepat ke seluruh Indonesia." />
+  <title>OBSShop — Belanja Online Terpercaya | Free Ongkir</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <!-- ========== TOP BAR ========== -->
+  <div class="topbar">
+    <div class="container">
+      <a href="#">Jual di OBSShop</a>
+      <a href="#">Unduh Aplikasi</a>
+      <a href="#">Pusat Bantuan</a>
+      <a href="#">Lacak Pesanan</a>
+    </div>
+  </div>
+
+  <!-- ========== HEADER ========== -->
+  <header id="main-header">
+    <div class="header-top">
+      <div class="container">
+        <div class="header-top-inner">
+
+          <!-- Logo -->
+          <div class="logo-area">
+            <a href="#" id="logo-link">
+              <span class="logo-icon">🛒</span>
+              <span class="logo-text">OBS<span class="logo-accent">Shop</span></span>
+            </a>
+          </div>
+
+          <!-- Deliver to -->
+          <div class="header-location">
+            <span class="action-label-1">📍 Kirim ke</span>
+            <strong>Indonesia</strong>
+          </div>
+
+          <!-- Search -->
+          <div class="search-area">
+            <div class="search-bar">
+              <select class="search-category-select" id="search-category-select" aria-label="Pilih kategori">
+                <option value="all">Semua Kategori</option>
+                <!-- Populated by JS -->
+              </select>
+              <input type="text" id="search-input" placeholder="Cari produk, merek, atau kategori..." aria-label="Cari produk" />
+              <button id="search-btn" aria-label="Cari">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="header-actions">
+            <a href="#" class="action-btn" id="account-btn" aria-label="Akun saya">
+              <span class="action-label-1">Halo, Masuk</span>
+              <span class="action-label-2">Akun &amp; Daftar ▾</span>
+            </a>
+            <a href="#" class="action-btn" id="orders-btn" aria-label="Pesanan">
+              <span class="action-label-1">Pesanan</span>
+              <span class="action-label-2">Saya</span>
+            </a>
+            <a href="#" class="action-btn-icon" id="cart-btn" aria-label="Keranjang">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              <span class="badge" id="cart-count" style="display:none;">0</span>
+              <span>Keranjang</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="header-nav" id="main-nav" aria-label="Kategori navigasi">
+      <div class="container">
+        <ul class="nav-list" id="nav-list">
+          <li><a href="#" class="nav-link active" data-category="all">Beranda</a></li>
+          <!-- Category links populated by JS -->
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ========== HERO BANNER ========== -->
+  <section class="hero-banner" id="hero-section" aria-label="Promo utama">
+    <div class="hero-slider" id="hero-slider">
+      <div class="hero-slide active" style="background: linear-gradient(160deg, #1a2744 0%, #2c3e6d 60%, #1a3a5c 100%);">
+        <div class="hero-content">
+          <span class="hero-tag">Flash Sale · Hari Ini</span>
+          <h1 class="hero-title">Diskon Hingga<br/><span class="hero-highlight">70% OFF</span></h1>
+          <p class="hero-sub">Promo terbatas — belanja sekarang sebelum kehabisan stok</p>
+          <a href="#product-section" class="hero-btn">Belanja Sekarang</a>
+        </div>
+        <div class="hero-img-wrap">
+          <img src="assets/img/hero1.svg" alt="Flash Sale" class="hero-img" id="hero-img-1" />
+        </div>
+      </div>
+
+      <div class="hero-slide" style="background: linear-gradient(160deg, #1c3a1c 0%, #2d5a2d 60%, #1a4a2a 100%);">
+        <div class="hero-content">
+          <span class="hero-tag">New Arrival · April 2026</span>
+          <h1 class="hero-title">Koleksi Terbaru<br/><span class="hero-highlight">Sudah Hadir</span></h1>
+          <p class="hero-sub">Produk premium pilihan dari ratusan brand ternama</p>
+          <a href="#product-section" class="hero-btn">Lihat Produk Baru</a>
+        </div>
+        <div class="hero-img-wrap">
+          <img src="assets/img/hero2.svg" alt="New Arrival" class="hero-img" id="hero-img-2" />
+        </div>
+      </div>
+
+      <div class="hero-slide" style="background: linear-gradient(160deg, #1a1f3a 0%, #252d52 60%, #1a2540 100%);">
+        <div class="hero-content">
+          <span class="hero-tag">Gratis Ongkir · Seluruh Indonesia</span>
+          <h1 class="hero-title">Bebas Ongkos<br/><span class="hero-highlight">Kirim</span></h1>
+          <p class="hero-sub">Untuk semua pesanan, tanpa minimum pembelian</p>
+          <a href="#product-section" class="hero-btn">Cek Sekarang</a>
+        </div>
+        <div class="hero-img-wrap">
+          <img src="assets/img/hero3.svg" alt="Free Shipping" class="hero-img" id="hero-img-3" />
+        </div>
+      </div>
+
+      <div class="slider-dots" id="slider-dots">
+        <button class="dot active" data-slide="0" aria-label="Slide 1"></button>
+        <button class="dot" data-slide="1" aria-label="Slide 2"></button>
+        <button class="dot" data-slide="2" aria-label="Slide 3"></button>
+      </div>
+      <button class="slider-prev" id="slider-prev" aria-label="Previous">&#8249;</button>
+      <button class="slider-next" id="slider-next" aria-label="Next">&#8250;</button>
+    </div>
+  </section>
+
+  <!-- ========== TRUST / STATS BAR ========== -->
+  <div class="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-icon">🚚</span>
+          <div>
+            <strong>Gratis Ongkir</strong>
+            <span>Ke seluruh Indonesia</span>
+          </div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-icon">🔒</span>
+          <div>
+            <strong>Pembayaran Aman</strong>
+            <span>Dijamin 100% aman</span>
+          </div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-icon">↩️</span>
+          <div>
+            <strong>Retur 30 Hari</strong>
+            <span>Garansi pengembalian</span>
+          </div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-icon">💬</span>
+          <div>
+            <strong>Layanan 24/7</strong>
+            <span>Siap membantu Anda</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== QUICK CATEGORIES ========== -->
+  <section class="quick-categories" id="categories-section" aria-label="Kategori produk">
+    <div class="container">
+      <div class="category-grid" id="category-grid">
+        <!-- Skeleton placeholders -->
+        <div class="category-skeleton"></div>
+        <div class="category-skeleton"></div>
+        <div class="category-skeleton"></div>
+        <div class="category-skeleton"></div>
+        <div class="category-skeleton"></div>
+        <div class="category-skeleton"></div>
+        <div class="category-skeleton"></div>
+        <div class="category-skeleton"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PRODUCTS ========== -->
+  <main id="product-section" class="product-section" aria-label="Daftar produk">
+    <div class="container">
+
+      <!-- Filter & Sort Bar -->
+      <div class="filter-bar" id="filter-bar">
+        <div class="filter-left">
+          <span class="filter-label">Kategori:</span>
+          <div class="filter-tags" id="filter-tags">
+            <button class="filter-tag active" data-category="all">Semua</button>
+          </div>
+        </div>
+        <div class="filter-right">
+          <label for="sort-select" class="sort-label">Urutkan:</label>
+          <select id="sort-select" class="sort-select">
+            <option value="default">Relevansi</option>
+            <option value="price-asc">Harga Terendah</option>
+            <option value="price-desc">Harga Tertinggi</option>
+            <option value="rating-desc">Rating Terbaik</option>
+            <option value="name-asc">Nama A–Z</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Loading Skeleton -->
+      <div id="loading-state" class="loading-state">
+        <div class="category-section-skeleton">
+          <div class="cat-header-skeleton"></div>
+          <div class="products-skeleton">
+            <div class="product-card-skeleton" id="skel-1"></div>
+            <div class="product-card-skeleton" id="skel-2"></div>
+            <div class="product-card-skeleton" id="skel-3"></div>
+            <div class="product-card-skeleton" id="skel-4"></div>
+            <div class="product-card-skeleton" id="skel-5"></div>
+          </div>
+        </div>
+        <div class="category-section-skeleton">
+          <div class="cat-header-skeleton"></div>
+          <div class="products-skeleton">
+            <div class="product-card-skeleton"></div>
+            <div class="product-card-skeleton"></div>
+            <div class="product-card-skeleton"></div>
+            <div class="product-card-skeleton"></div>
+            <div class="product-card-skeleton"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Container -->
+      <div id="products-container" class="products-container" aria-live="polite" style="display:none;">
+        <!-- Injected by JS -->
+      </div>
+
+      <!-- No Results -->
+      <div id="no-results" class="no-results" style="display:none;">
+        <div class="no-results-icon">🔍</div>
+        <h3>Tidak ada produk yang ditemukan</h3>
+        <p>Coba ubah kata kunci pencarian atau pilih kategori yang berbeda.</p>
+        <button id="reset-filter-btn" class="reset-btn">Reset Filter</button>
+      </div>
+
+      <!-- Load More -->
+      <div class="load-more-wrap" id="load-more-wrap" style="display:none;">
+        <button id="load-more-btn" class="load-more-btn">
+          <span id="load-more-text">Muat Lebih Banyak</span>
+          <span id="load-more-spinner" class="spinner" style="display:none;"></span>
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer id="main-footer">
+    <div class="footer-top-strip" id="footer-top-strip" role="button" tabindex="0">
+      ↑ Kembali ke atas halaman
+    </div>
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col footer-brand">
+            <div class="footer-logo">
+              <span class="logo-icon">🛒</span>
+              <span class="logo-text">OBS<span class="logo-accent">Shop</span></span>
+            </div>
+            <p class="footer-desc">Platform belanja online terpercaya. Jutaan produk dari ribuan penjual terpercaya dengan layanan pengiriman ke seluruh Indonesia.</p>
+            <div class="social-links">
+              <a href="#" class="social-btn" aria-label="Facebook">f</a>
+              <a href="#" class="social-btn" aria-label="Instagram">📷</a>
+              <a href="#" class="social-btn" aria-label="Twitter">𝕏</a>
+              <a href="#" class="social-btn" aria-label="YouTube">▶</a>
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-heading">Layanan Kami</h4>
+            <ul class="footer-links">
+              <li><a href="#">Cara Berbelanja</a></li>
+              <li><a href="#">Info Pengiriman</a></li>
+              <li><a href="#">Retur &amp; Pengembalian</a></li>
+              <li><a href="#">Lacak Pesanan</a></li>
+              <li><a href="#">Pusat Bantuan</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-heading">Tentang OBSShop</h4>
+            <ul class="footer-links">
+              <li><a href="#">Tentang Kami</a></li>
+              <li><a href="#">Karir</a></li>
+              <li><a href="#">Blog &amp; Berita</a></li>
+              <li><a href="#">Kebijakan Privasi</a></li>
+              <li><a href="#">Syarat &amp; Ketentuan</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="footer-heading">Metode Pembayaran</h4>
+            <div class="payment-methods">
+              <span class="payment-badge">VISA</span>
+              <span class="payment-badge">Mastercard</span>
+              <span class="payment-badge">PayPal</span>
+              <span class="payment-badge">GoPay</span>
+              <span class="payment-badge">OVO</span>
+              <span class="payment-badge">DANA</span>
+              <span class="payment-badge">BCA</span>
+              <span class="payment-badge">Mandiri</span>
+            </div>
+            <h4 class="footer-heading" style="margin-top:20px;">Keamanan</h4>
+            <div class="payment-methods">
+              <span class="payment-badge">🔒 SSL Secure</span>
+              <span class="payment-badge">✓ Buyer Protect</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="footer-divider" />
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2026 OBSShop. Hak cipta dilindungi. Data produk disediakan oleh <a href="https://dummyjson.com" target="_blank" rel="noopener noreferrer">dummyjson.com</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== PRODUCT DETAIL MODAL ========== -->
+  <div id="product-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Detail Produk" style="display:none;">
+    <div class="modal-box" id="modal-box">
+      <button class="modal-close" id="modal-close" aria-label="Tutup">&times;</button>
+      <div class="modal-body" id="modal-body">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TOAST ========== -->
+  <div id="toast-container" class="toast-container" aria-live="assertive" aria-atomic="true"></div>
+
+  <!-- ========== BACK TO TOP ========== -->
+  <button id="back-to-top" class="back-to-top" aria-label="Kembali ke atas" style="display:none;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>

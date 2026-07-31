@@ -1,0 +1,73 @@
+{{ define "admin_order_table" }}
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th width="80">No. Order</th>
+            <th>Email User & Tipe Akun</th>
+            <th>Detail Barang Dipesan</th>
+            <th>Total Harga</th>
+            <th>Status</th>
+            <th width="120" style="text-align:center;">Aksi Admin</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{ if .Orders }}
+            {{ range .Orders }}
+            <tr>
+                <td><strong>#{{ .ID }}</strong><br><small style="color:var(--text-muted);">{{ .FormattedDate }}</small></td>
+                <td>
+                    <strong>{{ .Email }}</strong><br>
+                    <span class="badge {{ if eq .UserType "partner" }}badge-warning{{ else }}badge-success{{ end }}">{{ .UserType }}</span>
+                </td>
+                <td>
+                    <ul style="margin:0; padding-left:1.1rem; font-size:0.84rem; line-height:1.5;">
+                        {{ range .Items }}
+                        <li><strong>{{ .ProductName }}</strong> (x{{ .Quantity }}) &mdash; {{ .FormattedSubtotal }}</li>
+                        {{ end }}
+                    </ul>
+                </td>
+                <td><strong style="color:#0284c7;">{{ .FormattedTotalPrice }}</strong></td>
+                <td>
+                    {{ if eq .Status "SELESAI" }}
+                        <span class="badge badge-success">✓ SELESAI</span>
+                    {{ else }}
+                        <span class="badge badge-warning">⏳ PENDING</span>
+                    {{ end }}
+                </td>
+                <td style="text-align:center;">
+                    {{ if eq .Status "PENDING" }}
+                        <button type="button" class="btn btn-primary" style="font-size:0.75rem; padding:0.35rem 0.75rem; background:#16a34a; border-color:#16a34a;" 
+                                onclick="completeAdminOrder({{ .ID }})">
+                            ✓ Selesai
+                        </button>
+                    {{ else }}
+                        <span style="font-size:0.75rem; color:#64748b; font-weight:600;">Sudah Selesai</span>
+                    {{ end }}
+                </td>
+            </tr>
+            {{ end }}
+        {{ else }}
+            <tr>
+                <td colspan="6" style="text-align:center; padding:3rem; color:var(--text-muted)">
+                    Belum ada data pesanan masuk.
+                </td>
+            </tr>
+        {{ end }}
+    </tbody>
+</table>
+
+<script>
+function completeAdminOrder(orderId) {
+    if (!confirm('Tandai pesanan #' + orderId + ' sebagai SELESAI? Stok produk akan otomatis dikurangi.')) return;
+
+    fetch('/admin/orders/complete?id=' + orderId, {
+        method: 'POST'
+    }).then(r => r.text()).then(html => {
+        document.getElementById('containerOrders').innerHTML = html;
+        alert('✓ Pesanan #' + orderId + ' berhasil diselesaikan & stok produk telah dikurangi!');
+    }).catch(err => {
+        alert('Terjadi kesalahan: ' + err);
+    });
+}
+</script>
+{{ end }}

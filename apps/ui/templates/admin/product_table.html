@@ -1,0 +1,77 @@
+{{ define "admin_product_table" }}
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th width="60">Foto</th>
+            <th>Nama Produk</th>
+            <th>Kategori</th>
+            <th>Brand</th>
+            <th>Harga (IDR)</th>
+            <th>Stok</th>
+            <th width="100">Aksi</th>
+        </tr>
+    </thead>
+    <tbody id="tblBodyProducts">
+        {{ if .Products }}
+            {{ range .Products }}
+            <tr>
+                <td>
+                    {{ if .Thumbnail }}
+                        <img src="{{ .Thumbnail }}" class="thumb-cell" alt="{{ .Name }}" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="thumb-cell" style="display:none; align-items:center; justify-content:center; font-size:0.7rem; color:#94a3b8; background:#e2e8f0;">No Img</div>
+                    {{ else }}
+                        <div class="thumb-cell" style="display:flex; align-items:center; justify-content:center; font-size:0.7rem; color:#94a3b8; background:#e2e8f0;">No Img</div>
+                    {{ end }}
+                </td>
+                <td>
+                    <strong>{{ .Name }}</strong><br>
+                    <small style="color:var(--text-muted);"><code>{{ .Slug }}</code></small>
+                </td>
+                <td><span class="badge badge-warning">{{ .CategoryName }}</span></td>
+                <td><span class="badge badge-success">{{ .BrandName }}</span></td>
+                <td><strong>{{ .FormattedPrice }}</strong></td>
+                <td>
+                    {{ if le .Stock 5 }}
+                        <span class="badge badge-danger">{{ .Stock }} unit</span>
+                    {{ else }}
+                        <span class="badge badge-success">{{ .Stock }} unit</span>
+                    {{ end }}
+                </td>
+                <td>
+                    <div style="display:flex; gap:0.5rem">
+                        <button class="btn btn-icon btn-outline" 
+                                onclick="openAdminModal('/admin/products/modal?id={{ .ID }}')" 
+                                title="Edit">✏️</button>
+                        <button class="btn btn-icon btn-danger-outline" 
+                                onclick="deleteAdminItem('/admin/products?id={{ .ID }}', 'containerProducts', 'Hapus produk {{ .Name }}?')" 
+                                title="Hapus">🗑️</button>
+                    </div>
+                </td>
+            </tr>
+            {{ end }}
+        {{ else }}
+            <tr>
+                <td colspan="7" style="text-align:center; padding:2rem; color:var(--text-muted)">Belum ada data produk. Klik "Tambah Produk" untuk membuat baru.</td>
+            </tr>
+        {{ end }}
+    </tbody>
+</table>
+
+{{ if .PageInfo }}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem; padding-top:1rem; border-top:1px solid #e2e8f0; font-size:0.875rem; color:#64748b;">
+    <div>
+        Halaman <strong>{{ .PageInfo.CurrentPage }}</strong> dari <strong>{{ .PageInfo.TotalPages }}</strong> (Total {{ .PageInfo.TotalCount }} Data)
+    </div>
+    <div style="display:flex; gap:0.5rem;">
+        <button class="btn btn-outline" style="padding:0.35rem 0.75rem; font-size:0.8125rem;"
+                {{ if not .PageInfo.HasPrev }}disabled style="opacity:0.5; cursor:not-allowed;"{{ else }}onclick="changeAdminPage('/admin/products', {{ .PageInfo.PrevPage }}, 'containerProducts')"{{ end }}>
+            &laquo; Prev
+        </button>
+        <button class="btn btn-outline" style="padding:0.35rem 0.75rem; font-size:0.8125rem;"
+                {{ if not .PageInfo.HasNext }}disabled style="opacity:0.5; cursor:not-allowed;"{{ else }}onclick="changeAdminPage('/admin/products', {{ .PageInfo.NextPage }}, 'containerProducts')"{{ end }}>
+            Next &raquo;
+        </button>
+    </div>
+</div>
+{{ end }}
+{{ end }}

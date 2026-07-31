@@ -1,0 +1,75 @@
+{{ define "admin_banner_modal" }}
+<div class="modal-overlay active" id="modalBannerForm">
+    <div class="modal-card" style="max-width:650px;">
+        <div class="modal-header">
+            <h3>{{ if .Banner.ID }}Edit Banner Hero{{ else }}Tambah Banner Hero Baru{{ end }}</h3>
+            <button type="button" class="btn-close" onclick="closeAdminModal('modalBannerForm')">&times;</button>
+        </div>
+        <form onsubmit="submitAdminForm(event, '/admin/banners', 'containerBanners', 'modalBannerForm')">
+            <input type="hidden" name="id" value="{{ .Banner.ID }}">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Badge Text (Teks Kecil di Atas Judul) <span style="color:red;">*</span></label>
+                    <input type="text" class="form-control" name="badge_text" value="{{ .Banner.BadgeText }}" placeholder="Contoh: PROMO SPESIAL HARI INI" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Judul Utama Banner <span style="color:red;">*</span></label>
+                    <input type="text" class="form-control" name="title" value="{{ .Banner.Title }}" placeholder="Contoh: Belanja Hemat Hingga 70% OFF" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Deskripsi Lengkap Banner <span style="color:red;">*</span></label>
+                    <textarea class="form-control" name="description" rows="3" placeholder="Deskripsi penjelasan penawaran promo..." required>{{ .Banner.Description }}</textarea>
+                </div>
+
+                <div style="display:flex; gap:1rem;">
+                    <div class="form-group" style="flex:1;">
+                        <label class="form-label">Teks Tombol CTA <span style="color:red;">*</span></label>
+                        <input type="text" class="form-control" name="cta_text" value="{{ .Banner.CtaText }}" placeholder="Belanja Sekarang →" required>
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label class="form-label">Target URL / Link CTA <span style="color:red;">*</span></label>
+                        <input type="text" class="form-control" name="cta_url" value="{{ .Banner.CtaURL }}" placeholder="#product-section atau /category/fashion" required>
+                    </div>
+                </div>
+
+                <!-- Icon Picker -->
+                <div class="form-group">
+                    <label class="form-label">Pilihan Icon Grafis (Emoji / Icon) <span style="color:red;">*</span></label>
+                    <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.5rem;">
+                        <input type="text" class="form-control" name="icon" id="fBannerIcon" value="{{ if .Banner.Icon }}{{ .Banner.Icon }}{{ else }}🎁{{ end }}" placeholder="🎁" style="width:100px; text-align:center; font-size:1.5rem; font-weight:bold;" required>
+                        <span style="font-size:0.8125rem; color:#64748b;">Ketik emoji custom atau pilih preset di bawah:</span>
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:0.5rem; background:#f8fafc; padding:0.75rem; border-radius:10px; border:1px solid #e2e8f0;">
+                        {{ $currentIcon := .Banner.Icon }}
+                        <button type="button" class="btn btn-outline" style="font-size:1.25rem; padding:0.3rem 0.6rem;" onclick="document.getElementById('fBannerIcon').value='🎁';">🎁</button>
+                        <button type="button" class="btn btn-outline" style="font-size:1.25rem; padding:0.3rem 0.6rem;" onclick="document.getElementById('fBannerIcon').value='🏷️';">🏷️</button>
+                        <button type="button" class="btn btn-outline" style="font-size:1.25rem; padding:0.3rem 0.6rem;" onclick="document.getElementById('fBannerIcon').value='🚀';">🚀</button>
+                        <button type="button" class="btn btn-outline" style="font-size:1.25rem; padding:0.3rem 0.6rem;" onclick="document.getElementById('fBannerIcon').value='⚡';">⚡</button>
+                        <button type="button" class="btn btn-outline" style="font-size:1.25rem; padding:0.3rem 0.6rem;" onclick="document.getElementById('fBannerIcon').value='🛍️';">🛍️</button>
+                        <button type="button" class="btn btn-outline" style="font-size:1.25rem; padding:0.3rem 0.6rem;" onclick="document.getElementById('fBannerIcon').value='💎';">💎</button>
+                        <button type="button" class="btn btn-outline" style="font-size:1.25rem; padding:0.3rem 0.6rem;" onclick="document.getElementById('fBannerIcon').value='🔥';">🔥</button>
+                        <button type="button" class="btn btn-outline" style="font-size:1.25rem; padding:0.3rem 0.6rem;" onclick="document.getElementById('fBannerIcon').value='🎒';">🎒</button>
+                        <button type="button" class="btn btn-outline" style="font-size:1.25rem; padding:0.3rem 0.6rem;" onclick="document.getElementById('fBannerIcon').value='💻';">💻</button>
+                        <button type="button" class="btn btn-outline" style="font-size:1.25rem; padding:0.3rem 0.6rem;" onclick="document.getElementById('fBannerIcon').value='📱';">📱</button>
+                        <button type="button" class="btn btn-outline" style="font-size:1.25rem; padding:0.3rem 0.6rem;" onclick="document.getElementById('fBannerIcon').value='🌟';">🌟</button>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top:1rem;">
+                    <label style="display:inline-flex; align-items:center; gap:0.5rem; font-weight:600; cursor:pointer;">
+                        <input type="checkbox" name="is_active" value="1" {{ if .Banner.IsActive }}checked{{ end }} style="width:18px; height:18px; accent-color:#2563eb;">
+                        <span>Aktifkan Banner di Halaman Utama (Storefront)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeAdminModal('modalBannerForm')">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan Banner</button>
+            </div>
+        </form>
+    </div>
+</div>
+{{ end }}

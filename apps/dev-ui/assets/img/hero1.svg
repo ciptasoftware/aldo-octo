@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280">
+  <defs>
+    <radialGradient id="g1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.35)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+    <filter id="shadow1">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="rgba(0,0,0,0.2)"/>
+    </filter>
+  </defs>
+  <ellipse cx="180" cy="140" rx="160" ry="125" fill="url(#g1)"/>
+  <!-- Shopping bag -->
+  <g filter="url(#shadow1)" transform="translate(90, 30)">
+    <rect x="30" y="60" width="120" height="110" rx="12" fill="white" opacity="0.95"/>
+    <path d="M55 60 Q55 30 90 30 Q125 30 125 60" fill="none" stroke="white" stroke-width="8" stroke-linecap="round"/>
+    <line x1="60" y1="95" x2="120" y2="95" stroke="#e53935" stroke-width="4" stroke-dasharray="8,4"/>
+    <text x="90" y="130" text-anchor="middle" font-size="28" font-weight="900" fill="#e53935" font-family="Arial,sans-serif">SALE</text>
+    <text x="90" y="155" text-anchor="middle" font-size="14" fill="#888" font-family="Arial,sans-serif">Limited Time</text>
+  </g>
+  <!-- Discount badge -->
+  <g transform="translate(230, 40)">
+    <circle cx="40" cy="40" r="38" fill="#FFD600"/>
+    <text x="40" y="30" text-anchor="middle" font-size="13" font-weight="900" fill="#1a1a2e" font-family="Arial,sans-serif">UP TO</text>
+    <text x="40" y="52" text-anchor="middle" font-size="24" font-weight="900" fill="#e53935" font-family="Arial,sans-serif">70%</text>
+    <text x="40" y="68" text-anchor="middle" font-size="13" font-weight="900" fill="#1a1a2e" font-family="Arial,sans-serif">OFF</text>
+  </g>
+  <!-- Stars -->
+  <text x="60" y="240" font-size="20">⭐⭐⭐⭐⭐</text>
+  <text x="62" y="265" font-size="13" fill="rgba(255,255,255,0.8)" font-family="Arial,sans-serif">Ribuan produk pilihan terbaik</text>
+</svg>

@@ -1,0 +1,142 @@
+{{ define "admin_product_modal" }}
+<div class="modal-overlay active" id="modalProductForm">
+    <div class="modal-card" style="max-width:720px;">
+        <div class="modal-header">
+            <h3>{{ if .Product.ID }}Edit Produk: {{ .Product.Name }}{{ else }}Buat Produk Baru{{ end }}</h3>
+            <button type="button" class="btn-close" onclick="closeAdminModal('modalProductForm')">&times;</button>
+        </div>
+        <form enctype="multipart/form-data" onsubmit="submitAdminForm(event, '/admin/products', 'containerProducts', 'modalProductForm')">
+            <input type="hidden" name="id" value="{{ .Product.ID }}">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nama Produk Lengkap <span style="color:red;">*</span></label>
+                    <input type="text" class="form-control" name="name" id="fProdName" value="{{ .Product.Name }}" placeholder="Masukkan nama produk lengkap" required
+                           oninput="if(!document.getElementById('fProdSlug').dataset.userEdited){ document.getElementById('fProdSlug').value = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''); }">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Pengenal Unik (Slug) <span style="color:red;">*</span></label>
+                    <input type="text" class="form-control" name="slug" id="fProdSlug" value="{{ .Product.Slug }}" placeholder="contoh: tas-ransel-korean" required
+                           oninput="this.dataset.userEdited = true;">
+                </div>
+
+                <div style="display:flex; gap:1rem;">
+                    <div class="form-group" style="flex:1">
+                        <label class="form-label">Target Brand <span style="color:red;">*</span></label>
+                        <select class="form-control" name="brand_id" required>
+                            <option value="">-- Pilih Brand --</option>
+                            {{ $selectedBrand := .Product.BrandID }}
+                            {{ range .Brands }}
+                                <option value="{{ .ID }}" {{ if eq .ID $selectedBrand }}selected{{ end }}>{{ .Name }}</option>
+                            {{ end }}
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex:1">
+                        <label class="form-label">Target Kategori <span style="color:red;">*</span></label>
+                        <select class="form-control" name="category_id" required>
+                            <option value="">-- Pilih Kategori --</option>
+                            {{ $selectedCat := .Product.CategoryID }}
+                            {{ range .Categories }}
+                                <option value="{{ .ID }}" {{ if eq .ID $selectedCat }}selected{{ end }}>{{ .Name }}</option>
+                            {{ end }}
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:1rem;">
+                    <div class="form-group" style="flex:1">
+                        <label class="form-label">Harga Resmi (IDR) <span style="color:red;">*</span></label>
+                        <input type="number" class="form-control" name="price" min="0.01" step="0.01" value="{{ if .Product.Price }}{{ .Product.Price }}{{ end }}" placeholder="0" required>
+                    </div>
+                    <div class="form-group" style="flex:1">
+                        <label class="form-label">Stok Gudang <span style="color:red;">*</span></label>
+                        <input type="number" class="form-control" name="stock" min="0" value="{{ if .Product.ID }}{{ .Product.Stock }}{{ else }}0{{ end }}" placeholder="0" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Upload Gambar Produk (JPG/PNG, Maks. 2MB per file, Batas 20 Gambar)</label>
+                    <input type="file" class="form-control" name="images" multiple accept="image/jpeg,image/png"
+                           onchange="for(let f of this.files){ if(f.size > 2*1024*1024){ alert('File '+f.name+' melebihi ukuran maksimal 2MB!'); this.value=''; break; } }">
+                    <small style="display:block; color:#64748b; margin-top:0.25rem;">Bisa pilih banyak gambar sekaligus (hingga 20 gambar per produk). Gambar disimpan di <code>/asset/products/</code></small>
+                </div>
+
+                <!-- Existing Images Gallery (Admin Management) -->
+                {{ if .Product.Images }}
+                <div class="form-group">
+                    <label class="form-label">Galeri Gambar Produk Tersimpan ({{ len .Product.Images }}/20)</label>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(110px, 1fr)); gap:0.75rem; margin-top:0.5rem; background:#f8fafc; padding:0.75rem; border-radius:8px; border:1px solid #e2e8f0;">
+                        {{ $prodID := .Product.ID }}
+                        {{ range .Product.Images }}
+                        <div style="position:relative; background:white; border-radius:6px; overflow:hidden; border:1px solid {{ if .IsThumbnail }}#2563eb{{ else }}#cbd5e1{{ end }}; text-align:center; padding:0.35rem;">
+                            {{ if .IsThumbnail }}
+                                <span style="position:absolute; top:2px; left:2px; background:#2563eb; color:white; font-size:0.6rem; font-weight:700; padding:2px 4px; border-radius:3px; z-index:2;">Thumbnail</span>
+                            {{ end }}
+                            <img src="{{ .ImageURL }}" style="width:100%; height:75px; object-fit:cover; border-radius:4px; margin-bottom:0.35rem;" alt="Produk Image">
+                            <div style="display:flex; flex-direction:column; gap:2px;">
+                                {{ if not .IsThumbnail }}
+                                <button type="button" class="btn btn-outline" style="font-size:0.65rem; padding:2px 4px; color:#2563eb; border-color:#93c5fd;" 
+                                        onclick="setProductThumbnail({{ $prodID }}, {{ .ID }})">⭐ Thumbnail</button>
+                                {{ end }}
+                                <button type="button" class="btn btn-outline" style="font-size:0.65rem; padding:2px 4px; color:#dc2626; border-color:#fca5a5;" 
+                                        onclick="deleteProductImage({{ $prodID }}, {{ .ID }})">🗑️ Hapus</button>
+                            </div>
+                        </div>
+                        {{ end }}
+                    </div>
+                </div>
+                {{ end }}
+
+                <div class="form-group">
+                    <label class="form-label">Deskripsi Produk <span style="color:red;">*</span></label>
+                    <textarea class="form-control" name="description" rows="4" placeholder="Deskripsi lengkap produk..." required>{{ .Product.Description }}</textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeAdminModal('modalProductForm')">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan Produk</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function setProductThumbnail(productId, imageId) {
+    if (!confirm('Jadikan gambar ini sebagai Thumbnail Utama?')) return;
+    const body = new URLSearchParams();
+    body.append('product_id', productId);
+    body.append('image_id', imageId);
+
+    fetch('/admin/products/images/set-thumbnail', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString()
+    }).then(r => r.json()).then(res => {
+        if (res.success) {
+            openAdminModal('/admin/products/modal?id=' + productId);
+        } else {
+            alert('Gagal mengubah thumbnail');
+        }
+    }).catch(e => alert('Terjadi kesalahan: ' + e));
+}
+
+function deleteProductImage(productId, imageId) {
+    if (!confirm('Yakin ingin menghapus gambar ini?')) return;
+    const body = new URLSearchParams();
+    body.append('product_id', productId);
+    body.append('image_id', imageId);
+
+    fetch('/admin/products/images/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString()
+    }).then(r => r.json()).then(res => {
+        if (res.success) {
+            openAdminModal('/admin/products/modal?id=' + productId);
+        } else {
+            alert('Gagal menghapus gambar');
+        }
+    }).catch(e => alert('Terjadi kesalahan: ' + e));
+}
+</script>
+{{ end }}

@@ -1,0 +1,14 @@
+{{ define "admin_search" }}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Hasil Pencarian Admin</h1>
+        <p style="color:var(--text-muted); margin-top:0.25rem;">
+            Menampilkan {{ .Results.TotalCount }} data ditemukan untuk kata kunci <strong>"{{ .SearchQuery }}"</strong>.
+        </p>
+    </div>
+</div>
+
+<div class="table-container" id="containerSearchResults">
+    {{ template "admin_search_results" . }}
+</div>
+{{ end }}

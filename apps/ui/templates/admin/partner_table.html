@@ -1,0 +1,59 @@
+{{ define "admin_partner_table" }}
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>Nama Lengkap</th>
+            <th>Email</th>
+            <th>No. Telp</th>
+            <th>Perusahaan</th>
+            <th>Deskripsi</th>
+            <th width="100">Aksi</th>
+        </tr>
+    </thead>
+    <tbody id="tblBodyPartners">
+        {{ if .Partners }}
+            {{ range .Partners }}
+            <tr>
+                <td><strong>{{ .Name }}</strong></td>
+                <td><code>{{ .Email }}</code></td>
+                <td>{{ if .Phone }}{{ .Phone }}{{ else }}<span style="color:var(--text-muted);">-</span>{{ end }}</td>
+                <td>{{ if .CompanyName }}<strong>{{ .CompanyName }}</strong>{{ else }}<span style="color:var(--text-muted);">-</span>{{ end }}</td>
+                <td><small style="color:var(--text-muted);">{{ if .Description }}{{ .Description }}{{ else }}-{{ end }}</small></td>
+                <td>
+                    <div style="display:flex; gap:0.5rem">
+                        <button class="btn btn-icon btn-outline" 
+                                onclick="openAdminModal('/admin/partners/modal?id={{ .ID }}')" 
+                                title="Edit">✏️</button>
+                        <button class="btn btn-icon btn-danger-outline" 
+                                onclick="deleteAdminItem('/admin/partners?id={{ .ID }}', 'containerPartners', 'Hapus partner {{ .Name }}?')" 
+                                title="Hapus">🗑️</button>
+                    </div>
+                </td>
+            </tr>
+            {{ end }}
+        {{ else }}
+            <tr>
+                <td colspan="6" style="text-align:center; padding:2rem; color:var(--text-muted)">Belum ada data partner. Klik "Tambah Partner" untuk membuat data baru.</td>
+            </tr>
+        {{ end }}
+    </tbody>
+</table>
+
+{{ if .PageInfo }}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem; padding-top:1rem; border-top:1px solid #e2e8f0; font-size:0.875rem; color:#64748b;">
+    <div>
+        Halaman <strong>{{ .PageInfo.CurrentPage }}</strong> dari <strong>{{ .PageInfo.TotalPages }}</strong> (Total {{ .PageInfo.TotalCount }} Data)
+    </div>
+    <div style="display:flex; gap:0.5rem;">
+        <button class="btn btn-outline" style="padding:0.35rem 0.75rem; font-size:0.8125rem;"
+                {{ if not .PageInfo.HasPrev }}disabled style="opacity:0.5; cursor:not-allowed;"{{ else }}onclick="changeAdminPage('/admin/partners', {{ .PageInfo.PrevPage }}, 'containerPartners')"{{ end }}>
+            &laquo; Prev
+        </button>
+        <button class="btn btn-outline" style="padding:0.35rem 0.75rem; font-size:0.8125rem;"
+                {{ if not .PageInfo.HasNext }}disabled style="opacity:0.5; cursor:not-allowed;"{{ else }}onclick="changeAdminPage('/admin/partners', {{ .PageInfo.NextPage }}, 'containerPartners')"{{ end }}>
+            Next &raquo;
+        </button>
+    </div>
+</div>
+{{ end }}
+{{ end }}
